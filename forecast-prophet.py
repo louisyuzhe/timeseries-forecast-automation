@@ -14,7 +14,9 @@ dataset = pd.read_csv('monthly-car-sales.csv')
 #%%
 a = Predictor_fbprophet(dataset)
 a.outsample_forecast()
+print(a.outsample_forecast(output=False))
 a.evaluate_model()
+print(a.evaluate_model(output=False))
 #%%
 class Predictor_fbprophet:
     def __init__(self, df):
@@ -55,7 +57,7 @@ class Predictor_fbprophet:
         future = pd.DataFrame(future)
         future.columns = ['ds']
         future['ds']= pd.to_datetime(future['ds'])
-        
+        #future = model.make_future_dataframe(periods=step, freq='MS')
         # use the model to make a forecast
         forecast = model.predict(future)
         
@@ -64,44 +66,54 @@ class Predictor_fbprophet:
     """
     Out-of-Sample Forecast
     """
-    def outsample_forecast(self):
+    def outsample_forecast(self, output=True):
         forecast, model = self.forecast(self.df, 12)
         
-        # summarize the forecast
-        print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']])
+        if (output==True):
+            # summarize the forecast
+            print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']])
+            
+            # plot forecast
+            model.plot(forecast)
+            plt.show()
         
-        # plot forecast
-        model.plot(forecast)
-        plt.show()
+        return forecast
             
     """
     Evaluate Forecast Model
     """
-    def evaluate_model(self):
+    def evaluate_model(self, output=True):
         # Last 12 months as test data
         train = self.df.drop(self.df.index[-12:])
         
         #Fit training dataset
         forecast, model = self.forecast(train, 12)
 
-        # calculate MAE between expected and predicted values for december
+        # calculate MAE between expected and predicted values
         y_true = self.df[self.df.columns[1]][-12:].values
         y_pred = forecast['yhat'].values
         mae = mean_absolute_error(y_true, y_pred)
-        print('MAE: %.3f' % mae)
+        
         
         mse = ((y_pred - y_true) ** 2).mean()
         rounded_mse = round(mse, 2)
         rmse = round(np.sqrt(mse), 2)
-        print('The Mean Squared Error of our forecasts is {}'.format(rounded_mse))
-
-        print('The Root Mean Squared Error of our forecasts is {}'.format(rmse))
         
-        # plot expected vs actual
-        plt.plot(forecast['ds'], y_true, label='Actual')
-        plt.plot(forecast['ds'], y_pred, label='Predicted')
-        plt.xticks(forecast['ds'], rotation=65)
-        plt.legend()
-        plt.show()
-        
+        if (output==True):
+            print('MAE: %.3f' % mae)
+            print('The Mean Squared Error of our forecasts is {}'.format(rounded_mse))
+            print('The Root Mean Squared Error of our forecasts is {}'.format(rmse))
+            
+            # plot expected vs actual
+            plt.plot(forecast['ds'], y_true, label='Actual')
+            plt.plot(forecast['ds'], y_pred, label='Predicted')
+            plt.xticks(forecast['ds'], rotation=65)
+            plt.legend()
+            plt.show()
+        """
+        plt.figure(figsize=(10, 7))
+        plt.plot(forecast['Date'], forecast['y_trend'], 'b-')
+        plt.legend(); plt.xlabel('Date'); plt.ylabel('y')
+        plt.title('y Trend');
+        """
         return rounded_mse, rmse, mae
