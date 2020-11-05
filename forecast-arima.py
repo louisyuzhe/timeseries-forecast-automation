@@ -73,7 +73,7 @@ class Predictor_model2:
                         continue
         
         # Lowest AIC = optimal set of parameters that yields the best performance for ARIMA model 
-        print(model_result[model_result.aic == model_result.aic.min()])
+        #print(model_result[model_result.aic == model_result.aic.min()])
         optimal_param = model_result[model_result.aic == model_result.aic.min()]
         #print(model_result)
         return optimal_param
@@ -103,35 +103,38 @@ class Predictor_model2:
     """
     Evaluate Forecast Model
     """
-    def evaluate_model(self):
+    def evaluate_model(self, output=True):
         # Predict last 12 months of data
         self.pred = self.results.get_prediction(start=-12, dynamic=False)
         pred_ci = self.pred.conf_int()
-        ax = self.y.plot(label='observed')
-        self.pred.predicted_mean.plot(ax=ax, label='One-step ahead Forecast', alpha=.7, figsize=(14, 7))
-        ax.fill_between(pred_ci.index,
-                        pred_ci.iloc[:, 0],
-                        pred_ci.iloc[:, 1], color='k', alpha=.2)
-        ax.set_xlabel('Date')
-        ax.set_ylabel('Furniture Sales')
-        plt.legend()
-        plt.show()
+        if (output==True):
+            ax = self.y.plot(label='observed')
+            self.pred.predicted_mean.plot(ax=ax, label='One-step ahead Forecast', alpha=.7, figsize=(14, 7))
+            ax.fill_between(pred_ci.index,
+                            pred_ci.iloc[:, 0],
+                            pred_ci.iloc[:, 1], color='k', alpha=.2)
+            ax.set_xlabel('Date')
+            ax.set_ylabel('Furniture Sales')
+            plt.legend()
+            plt.show()
         
     """
     Analyze quality of the estimator 
     """
-    def analyze_estimator(self):
+    def analyze_estimator(self, output=True):
         y_forecasted = self.pred.predicted_mean
         y_truth = self.y[-12:]
         mse = ((y_forecasted - y_truth) ** 2).mean()
         rounded_mse = round(mse, 2)
         rmse = round(np.sqrt(mse), 2)
-        print('The Mean Squared Error of our forecasts is {}'.format(rounded_mse))
-
-        print('The Root Mean Squared Error of our forecasts is {}'.format(rmse))
         
+        # calculate MAE between expected and predicted values
         mae = mean_absolute_error(y_truth, y_forecasted)
-        print('MAE: %.3f' % mae)
+
+        if (output==True):
+            print('The Mean Squared Error of our forecasts is {}'.format(rounded_mse))
+            print('The Root Mean Squared Error of our forecasts is {}'.format(rmse))    
+            print('MAE: %.3f' % mae)
         
         return rounded_mse, rmse, mae
     
@@ -139,18 +142,19 @@ class Predictor_model2:
     Out-of-Sample Forecast
     Producing and visualizing forecasts
     """
-    def outsample_forecast(self):
+    def outsample_forecast(self, output=True):
         pred_uc = self.results.get_forecast(steps=12)
         pred_ci = pred_uc.conf_int()
-        ax = self.y.plot(label='observed', figsize=(14, 7))
-        pred_uc.predicted_mean.plot(ax=ax, label='Forecast')
-        ax.fill_between(pred_ci.index,
-                        pred_ci.iloc[:, 0],
-                        pred_ci.iloc[:, 1], color='k', alpha=.25)
-        ax.set_xlabel('Date')
-        ax.set_ylabel('count')
-        plt.legend()
-        plt.show()
+        if (output==True):
+            ax = self.y.plot(label='observed', figsize=(14, 7))
+            pred_uc.predicted_mean.plot(ax=ax, label='Forecast')
+            ax.fill_between(pred_ci.index,
+                            pred_ci.iloc[:, 0],
+                            pred_ci.iloc[:, 1], color='k', alpha=.25)
+            ax.set_xlabel('Date')
+            ax.set_ylabel('count')
+            plt.legend()
+            plt.show()
         return pred_uc.predicted_mean
         
 #%%
@@ -158,7 +162,7 @@ class Predictor_model2:
 test = Predictor_model2(df)
 #test.decompose_data()
 test.fit_model()
-test.evaluate_model()
-test.analyze_estimator()
-pred_result = test.outsample_forecast()
+test.evaluate_model(output=False)
+test.analyze_estimator(output=False)
+pred_result = test.outsample_forecast(output=False)
 print(pred_result)
