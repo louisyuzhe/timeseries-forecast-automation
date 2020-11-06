@@ -36,7 +36,7 @@ class Predictor_fbprophet:
         df['ds']= pd.to_datetime(df['ds'])
         
         # define the model
-        model = Prophet()
+        model = Prophet(interval_width=0.95)
         
         # fit the model
         model.fit(df)
@@ -78,6 +78,7 @@ class Predictor_fbprophet:
             
             # plot forecast
             model.plot(forecast)
+            model.plot_components(forecast)
             plt.show()
         
         return forecast
