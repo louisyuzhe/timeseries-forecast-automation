@@ -10,13 +10,16 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import mean_absolute_error
 import numpy as np 
 
-dataset = pd.read_csv('monthly-car-sales.csv')
+#dataset = pd.read_csv('monthly-car-sales.csv')
 #%%
+#Test functions
+"""
 a = Predictor_fbprophet(dataset)
 a.outsample_forecast()
 print(a.outsample_forecast(output=False))
 a.evaluate_model()
 print(a.evaluate_model(output=False))
+"""
 #%%
 class Predictor_fbprophet:
     def __init__(self, df):

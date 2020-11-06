@@ -8,9 +8,8 @@ Created on Tue Nov  3 00:23:22 2020
 import pandas as pd
 import numpy as np 
 import matplotlib.pyplot as plt
-from pylab import rcParams
 
-df = pd.read_csv("monthly-car-sales.csv")
+#df = pd.read_csv("monthly-car-sales.csv")
 
 #%%
 import warnings
@@ -18,10 +17,9 @@ warnings.filterwarnings("ignore")
 warnings.simplefilter('once', category=UserWarning)
 import itertools
 import statsmodels.api as sm
-from statsmodels.tools.sm_exceptions import ConvergenceWarning, ValueWarning
 from sklearn.metrics import mean_absolute_error
 
-class Predictor_model2:
+class Predictor_arima:
     def __init__(self, df):
         df.columns = ['ds', 'y']
         df['ds']= pd.to_datetime(df['ds'])
@@ -158,7 +156,8 @@ class Predictor_model2:
         return pred_uc.predicted_mean
         
 #%%
-
+#Test functions
+"""
 test = Predictor_model2(df)
 #test.decompose_data()
 test.fit_model()
@@ -166,3 +165,4 @@ test.evaluate_model(output=False)
 test.analyze_estimator(output=False)
 pred_result = test.outsample_forecast(output=False)
 print(pred_result)
+"""
