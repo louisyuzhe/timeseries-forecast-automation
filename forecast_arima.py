@@ -19,7 +19,7 @@ import itertools
 import statsmodels.api as sm
 from sklearn.metrics import mean_absolute_error
 
-class Predictor_arima:
+class Predictor_ARIMA:
     def __init__(self, df):
         df.columns = ['ds', 'y']
         df['ds']= pd.to_datetime(df['ds'])
