@@ -18,11 +18,17 @@ result.plot()
 #%%
 """
 Holt Winter’s Exponential Smoothing (HWES)
+
+Also called the Triple Exponential Smoothing method.
+Models the next time step as an exponentially weighted linear function of observations at prior time steps, 
+taking trends and seasonality into account.
+
+Suitable for univariate time series with trend and/or seasonal components.
 """
 #from statsmodels.tsa.arima_model import ARMA
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
 import warnings
-from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 class Predictor_HWES:
     def __init__(self, df):
