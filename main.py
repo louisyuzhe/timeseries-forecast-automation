@@ -7,6 +7,7 @@ Created on Wed Nov  4 23:51:34 2020
 from forecast_arima import Predictor_ARIMA
 from forecast_prophet import Predictor_fbprophet
 from forecast_arma import Predictor_ARMA
+from forecast_hwes import Predictor_HWES
 
 import pandas as pd
 df = pd.read_csv("../monthly-car-sales.csv")
@@ -36,13 +37,28 @@ fbprophet_pred_yhat = fbprophet_pred['yhat']
 fbprophet_pred_yhat.index = fbprophet_pred['ds']
 
 #%%
-
+"""
+ARMA
+"""
 arma_result = Predictor_ARMA(df)
 arma_result.evaluate_model(output=False)
-print(eval_result)
+print(arma_result)
 arma_pred = arma_result.outsample_forecast(output=False)
 #arma_pred.plot()
 arma_pred+=fbprophet_seasonality
+
+#%%
+"""
+HWES
+"""
+hwes_result = Predictor_HWES(df)
+hwes_result.param_selection(12) #Choose best config
+mse,rmse,mae=hwes_result.evaluate_model(output=False)
+print(mse,rmse,mae)
+hwes_pred = hwes_result.outsample_forecast(output=False)
+print(hwes_pred)
+#arma_pred.plot()
+
 #%%
 """
 Comparison
@@ -54,6 +70,7 @@ ax = original_df['y'].plot(label= 'Observed', color='cyan', legend=True)
 arima_pred.plot(label= 'ARIMA_forecast', color='blue', legend=True, ax=ax)
 fbprophet_pred_yhat.plot(label= 'fbprophet_forecast', color='red', legend=True, ax=ax)
 arma_pred.plot(label= 'ARMA_forecast', color='green', legend=True, ax=ax)
+hwes_pred.plot(label= 'HWES_forecast', color='orange', legend=True, ax=ax)
 
 #%%
 """
