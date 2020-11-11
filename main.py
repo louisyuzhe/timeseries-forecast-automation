@@ -19,7 +19,8 @@ ARIMA
 arima_result = Predictor_ARIMA(df)
 arima_result.fit_model()
 arima_result.evaluate_model(output=False)
-arima_result.analyze_estimator(output=False)
+mse_arima,rmse_arima,mae_arima=arima_result.analyze_estimator(output=False)
+print(mse_arima,rmse_arima,mae_arima)
 arima_pred = arima_result.outsample_forecast(output=False)
 print(arima_pred)
 #arima_pred.plot()
@@ -53,8 +54,8 @@ HWES
 """
 hwes_result = Predictor_HWES(df)
 hwes_result.param_selection(12) #Choose best config
-mse,rmse,mae=hwes_result.evaluate_model(output=False)
-print(mse,rmse,mae)
+mse_hwes,rmse_hwes,mae_hwes=hwes_result.evaluate_model(output=False)
+print(mse_hwes,rmse_hwes,mae_hwes)
 hwes_pred = hwes_result.outsample_forecast(output=False)
 print(hwes_pred)
 #arma_pred.plot()
