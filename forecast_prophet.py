@@ -7,7 +7,7 @@ Created on Wed Oct 28 13:23:14 2020
 from fbprophet import Prophet
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 import numpy as np 
 
 #dataset = pd.read_csv('monthly-car-sales.csv')
@@ -92,22 +92,23 @@ class Predictor_fbprophet:
         
         #Fit training dataset
         forecast, model = self.forecast(train, 12)
-
         # calculate MAE between expected and predicted values
         y_true = self.df[self.df.columns[1]][-12:].values
         y_pred = forecast['yhat'].values
+        """
         mae = mean_absolute_error(y_true, y_pred)
         
         
         mse = ((y_pred - y_true) ** 2).mean()
         rounded_mse = round(mse, 2)
         rmse = round(np.sqrt(mse), 2)
-        
+        """
         if (output==True):
+            """
             print('MAE: %.3f' % mae)
             print('The Mean Squared Error of our forecasts is {}'.format(rounded_mse))
             print('The Root Mean Squared Error of our forecasts is {}'.format(rmse))
-            
+            """
             # plot expected vs actual
             plt.plot(forecast['ds'], y_true, label='Actual')
             plt.plot(forecast['ds'], y_pred, label='Predicted')
@@ -120,4 +121,67 @@ class Predictor_fbprophet:
         plt.legend(); plt.xlabel('Date'); plt.ylabel('y')
         plt.title('y Trend');
         """
-        return rounded_mse, rmse, mae
+        # Return evaluation array
+        model_evaluation = self.model_eval(y_true, y_pred)
+        
+        #return rounded_mse, rmse, mae
+        return model_evaluation[1], model_evaluation[2], model_evaluation[0]
+
+
+    def model_eval(self, y, predictions):    
+        # Mean absolute error (MAE)
+        mae = mean_absolute_error(y, predictions)
+    
+        # Mean squared error (MSE)
+        mse = mean_squared_error(y, predictions)
+    
+    
+        # SMAPE is an alternative for MAPE when there are zeros in the testing data. It
+        # scales the absolute percentage by the sum of forecast and observed values
+        SMAPE = np.mean(np.abs((y - predictions) / ((y + predictions)/2))) * 100
+    
+    
+        # Calculate the Root Mean Squared Error
+        rmse = np.sqrt(mean_squared_error(y, predictions))
+    
+        # Calculate the Mean Absolute Percentage Error
+        # y, predictions = check_array(y, predictions)
+        MAPE = np.mean(np.abs((y - predictions) / y)) * 100
+    
+        # mean_forecast_error
+        mfe = np.mean(y - predictions)
+    
+        # NMSE normalizes the obtained MSE after dividing it by the test variance. It
+        # is a balanced error measure and is very effective in judging forecast
+        # accuracy of a model.
+    
+        # normalised_mean_squared_error
+        NMSE = mse / (np.sum((y - np.mean(y)) ** 2)/(len(y)-1))
+    
+    
+        # theil_u_statistic
+        # It is a normalized measure of total forecast error.
+        error = y - predictions
+        mfe = np.sqrt(np.mean(predictions**2))
+        mse = np.sqrt(np.mean(y**2))
+        rmse = np.sqrt(np.mean(error**2))
+        theil_u_statistic =  rmse / (mfe*mse)
+    
+    
+        # mean_absolute_scaled_error
+        # This evaluation metric is used to over come some of the problems of MAPE and
+        # is used to measure if the forecasting model is better than the naive model or
+        # not.
+    
+        
+        # Print metrics
+        print('Mean Absolute Error:', round(mae, 3))
+        print('Mean Squared Error:', round(mse, 3))
+        print('Root Mean Squared Error:', round(rmse, 3))
+        print('Mean absolute percentage error:', round(MAPE, 3))
+        print('Scaled Mean absolute percentage error:', round(SMAPE, 3))
+        print('Mean forecast error:', round(mfe, 3))
+        print('Normalised mean squared error:', round(NMSE, 3))
+        print('Theil_u_statistic:', round(theil_u_statistic, 3))
+        
+        return [mae,mse,rmse,MAPE,SMAPE,mfe,NMSE,theil_u_statistic]
