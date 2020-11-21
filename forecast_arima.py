@@ -118,8 +118,9 @@ class Predictor_ARIMA:
         
     """
     Analyze quality of the estimator 
+    Default evaluation metric is RMSE
     """
-    def analyze_estimator(self, output=True):
+    def analyze_estimator(self, output=True, eval_metric=2):
         y_forecasted = self.pred.predicted_mean
         y_truth = self.y[-12:]
         """
@@ -140,7 +141,8 @@ class Predictor_ARIMA:
             print('MAE: %.3f' % mae)
         """
         #return rounded_mse, rmse, mae
-        return model_evaluation[1], model_evaluation[2], model_evaluation[0]
+        print(model_evaluation[1], model_evaluation[2], model_evaluation[0])
+        return model_evaluation[eval_metric]
 
 
     """

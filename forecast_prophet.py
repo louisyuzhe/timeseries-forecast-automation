@@ -85,8 +85,9 @@ class Predictor_fbprophet:
             
     """
     Evaluate Forecast Model
+    Default evaluation metric is RMSE
     """
-    def evaluate_model(self, output=True):
+    def evaluate_model(self, output=True, eval_metric=2):
         # Last 12 months as test data
         train = self.df.drop(self.df.index[-12:])
         
@@ -125,7 +126,8 @@ class Predictor_fbprophet:
         model_evaluation = self.model_eval(y_true, y_pred)
         
         #return rounded_mse, rmse, mae
-        return model_evaluation[1], model_evaluation[2], model_evaluation[0]
+        print(model_evaluation[1], model_evaluation[2], model_evaluation[0])
+        return model_evaluation[eval_metric]
 
 
     def model_eval(self, y, predictions):    

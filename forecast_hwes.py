@@ -59,8 +59,9 @@ class Predictor_HWES:
     
     """
     Evaluate Forecast Model
+    Default evaluation metric is RMSE
     """
-    def evaluate_model(self, output=True):
+    def evaluate_model(self, output=True, eval_metric=2):
         # Predict last 12 months of data
         y_truth = self.y[-12:].copy()
         model_fit = self.fit_model(self.train)
@@ -72,7 +73,9 @@ class Predictor_HWES:
         if (output==True):
             print(model_fit.summary()) 
             
-        return model_evaluation[1], model_evaluation[2], model_evaluation[0]
+        #return rounded_mse, rmse, mae
+        print(model_evaluation[1], model_evaluation[2], model_evaluation[0])
+        return model_evaluation[eval_metric]
     
     
     """
