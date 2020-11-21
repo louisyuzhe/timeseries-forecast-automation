@@ -39,6 +39,14 @@ fbprophet_pred_yhat.index = fbprophet_pred['ds']
 
 #%%
 """
+Get Seasonality
+"""
+fbprophet_seasonality = fbprophet_pred['additive_terms']
+fbprophet_seasonality.index = fbprophet_pred['ds']
+fbprophet_seasonality.plot()
+
+#%%
+"""
 ARMA
 """
 arma_result = Predictor_ARMA(df)
@@ -73,10 +81,3 @@ fbprophet_pred_yhat.plot(label= 'fbprophet_forecast', color='red', legend=True, 
 arma_pred.plot(label= 'ARMA_forecast', color='green', legend=True, ax=ax)
 hwes_pred.plot(label= 'HWES_forecast', color='orange', legend=True, ax=ax)
 
-#%%
-"""
-Get Seasonality
-"""
-fbprophet_seasonality = fbprophet_pred['additive_terms']
-fbprophet_seasonality.index = fbprophet_pred['ds']
-fbprophet_seasonality.plot()
