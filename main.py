@@ -81,3 +81,22 @@ fbprophet_pred_yhat.plot(label= 'fbprophet_forecast', color='red', legend=True, 
 arma_pred.plot(label= 'ARMA_forecast', color='green', legend=True, ax=ax)
 hwes_pred.plot(label= 'HWES_forecast', color='orange', legend=True, ax=ax)
 
+#%%
+"""
+Evaluation metric for learning model
+1. Mean absolute error (MAE)
+2. Mean squared error (MSE)
+3. Root Mean Square Error (RMSE)
+4. Mean absolute percentage error (MAPE)
+5. Symmetric mean absolute percentage error (SMAPE)
+6. Mean Forecast Error (MFE)
+7. Normalized mean squared error (NMSE)
+8. Theil's U statistic
+"""
+from forecast_recommender import forecast_recommender
+
+df1 = pd.read_csv("../monthly-car-sales.csv")
+recommender = forecast_recommender(df1)
+result, model_name = recommender.auto_forecast(0)
+print(model_name)
+print(result)
