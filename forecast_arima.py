@@ -218,7 +218,7 @@ class Predictor_ARIMA:
         print('Scaled Mean absolute percentage error:', round(SMAPE, 3))
         print('Mean forecast error:', round(mfe, 3))
         print('Normalised mean squared error:', round(NMSE, 3))
-        print('Theil_u_statistic:', round(theil_u_statistic, 3))
+        print("Theil's U statistic:", round(theil_u_statistic, 3))
         
         return [mae,mse,rmse,MAPE,SMAPE,mfe,NMSE,theil_u_statistic]
 #%%
