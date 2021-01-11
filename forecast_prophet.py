@@ -9,7 +9,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import numpy as np 
-
+import logging, sys
+logging.disable(sys.maxsize)
+import warnings
+warnings.filterwarnings("ignore")
 #dataset = pd.read_csv('monthly-car-sales.csv')
 #%%
 #Test functions
@@ -126,7 +129,7 @@ class Predictor_fbprophet:
         model_evaluation = self.model_eval(y_true, y_pred)
         
         #return rounded_mse, rmse, mae
-        print(model_evaluation[1], model_evaluation[2], model_evaluation[0])
+        #print(model_evaluation[1], model_evaluation[2], model_evaluation[0])
         return model_evaluation[eval_metric]
 
 
@@ -177,6 +180,8 @@ class Predictor_fbprophet:
     
         
         # Print metrics
+        print("\n==============================================")
+        print("Metrics for FBProphet Model:")
         print('Mean Absolute Error:', round(mae, 3))
         print('Mean Squared Error:', round(mse, 3))
         print('Root Mean Squared Error:', round(rmse, 3))
@@ -185,5 +190,6 @@ class Predictor_fbprophet:
         print('Mean forecast error:', round(mfe, 3))
         print('Normalised mean squared error:', round(NMSE, 3))
         print('Theil_u_statistic:', round(theil_u_statistic, 3))
-        
+        print("==============================================\n")
+
         return [mae,mse,rmse,MAPE,SMAPE,mfe,NMSE,theil_u_statistic]

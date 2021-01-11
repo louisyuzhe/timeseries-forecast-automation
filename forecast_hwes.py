@@ -74,7 +74,7 @@ class Predictor_HWES:
             print(model_fit.summary()) 
             
         #return rounded_mse, rmse, mae
-        print(model_evaluation[1], model_evaluation[2], model_evaluation[0])
+        #print(model_evaluation[1], model_evaluation[2], model_evaluation[0])
         return model_evaluation[eval_metric]
     
     
@@ -201,6 +201,8 @@ class Predictor_HWES:
     
         
         # Print metrics
+        print("\n==============================================")
+        print("Metrics for HWES Model:")
         print('Mean Absolute Error:', round(mae, 3))
         print('Mean Squared Error:', round(mse, 3))
         print('Root Mean Squared Error:', round(rmse, 3))
@@ -209,5 +211,6 @@ class Predictor_HWES:
         print('Mean forecast error:', round(mfe, 3))
         print('Normalised mean squared error:', round(NMSE, 3))
         print('Theil_u_statistic:', round(theil_u_statistic, 3))
-        
+        print("==============================================\n")
+
         return [mae,mse,rmse,MAPE,SMAPE,mfe,NMSE,theil_u_statistic]

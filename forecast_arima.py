@@ -62,8 +62,8 @@ class Predictor_ARIMA:
                                                         enforce_stationarity=False,
                                                         enforce_invertibility=False)
                         with warnings.catch_warnings():
-                            warnings.filterwarnings('error')
-                            results = mod.fit()
+                            warnings.filterwarnings('ignore')
+                            results = mod.fit(disp=0)
                         newrow = [{'param':param,'param_seasonal':param_seasonal,'aic':results.aic}]
                         model_result=model_result.append(newrow,ignore_index=True,sort=False)
                         #model_result.append([param, param_seasonal, results.aic])
@@ -141,7 +141,7 @@ class Predictor_ARIMA:
             print('MAE: %.3f' % mae)
         """
         #return rounded_mse, rmse, mae
-        print(model_evaluation[1], model_evaluation[2], model_evaluation[0])
+        #print(model_evaluation[1], model_evaluation[2], model_evaluation[0])
         return model_evaluation[eval_metric]
 
 
@@ -211,6 +211,8 @@ class Predictor_ARIMA:
     
         
         # Print metrics
+        print("\n==============================================")
+        print("Metrics for ARIMA Model:")
         print('Mean Absolute Error:', round(mae, 3))
         print('Mean Squared Error:', round(mse, 3))
         print('Root Mean Squared Error:', round(rmse, 3))
@@ -219,7 +221,8 @@ class Predictor_ARIMA:
         print('Mean forecast error:', round(mfe, 3))
         print('Normalised mean squared error:', round(NMSE, 3))
         print("Theil's U statistic:", round(theil_u_statistic, 3))
-        
+        print("==============================================\n")
+
         return [mae,mse,rmse,MAPE,SMAPE,mfe,NMSE,theil_u_statistic]
 #%%
 #Test functions
