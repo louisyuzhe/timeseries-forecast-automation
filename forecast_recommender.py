@@ -43,7 +43,11 @@ class forecast_recommender:
         self.df = df
 
     def auto_forecast(self, evaluate_metric):
-        evaluator=1 # rmse is used to evaluate forecast model by default
+        if not 1 <= evaluate_metric < 8:
+            print("Please enter an evaluate metric within the range of integer 1 to 8")
+            return 0, 0
+        evaluate_metric = int(evaluate_metric) - 1
+        #evaluator=1 # rmse is used to evaluate forecast model by default
         eval_metric_dict={}
         
         arima_result = Predictor_ARIMA(self.df)
@@ -62,8 +66,7 @@ class forecast_recommender:
         eval_metric_dict["hwes"] = eval_metric_hwes
         
         # Determine best model using lowest rmse value
-        if(evaluator==1): #rmse, use rmse_dict
-            best_eval_metric = min(eval_metric_dict, key=lambda k: eval_metric_dict[k]) 
+        best_eval_metric = min(eval_metric_dict, key=lambda k: eval_metric_dict[k]) 
     
         if(best_eval_metric=='arima'):
             result_df = arima_result.outsample_forecast(output=False)
