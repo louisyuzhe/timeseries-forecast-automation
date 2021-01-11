@@ -6,7 +6,6 @@ Created on Wed Nov  4 23:51:34 2020
 """
 from forecast_recommender import forecast_recommender
 import pandas as pd
-df = pd.read_csv("../monthly-car-sales.csv")
 
 """
 Evaluation metric for learning model
@@ -22,6 +21,6 @@ Evaluation metric for learning model
 
 df1 = pd.read_csv("../monthly-car-sales.csv")
 recommender = forecast_recommender(df1)
-result, model_name = recommender.auto_forecast(0)
-print(model_name)
+result, model_name = recommender.auto_forecast(1)
+print("\nBest model for this dataset is ", model_name)
 print(result)
