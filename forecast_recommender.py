@@ -6,7 +6,7 @@ Created on Thu Nov 19 01:10:00 2020
 
 Automated univariate time-series forecasting
 Example:
-    auto_forecast(dataframe, evaluation_metric)
+    auto_forecast(evaluation_metric)
 
 Evaluation metric for learning model
 1. Mean absolute error (MAE)
