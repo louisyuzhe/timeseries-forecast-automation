@@ -1,6 +1,28 @@
 # Automated univariate time-series forecasting
 
-Evaluation metric for learning model
+# Aim
+### To build an automated system that will fit time-series dataset into different Statistical and Machine Learning Models for multi-step forecasting and return result from the most accurate model.
+The rationale for such a system is that it can be used by anyone (with or without STEM background) to easily apply time-series forecasting on their data. Since the models have basic setting, one can get the recommended model for their dataset through this system, then customize/fine-tune the said model to maximize its efficiency.
+
+# Models available
+## [ARIMA](forecast_arima.py)
+**ARIMA (Auto Regressive Integrated Moving Average)**` model is a generalization of an autoregressive moving average (ARMA) model. Both of these models are fitted to time series data either to better understand the data or to predict future points in the series (forecasting). ARIMA models are applied in some cases where data show evidence of non-stationarity in the sense of mean (but not variance/autocovariance), where an initial differencing step (corresponding to the "integrated" part of the model) can be applied one or more times to eliminate the non-stationarity of the mean function (i.e., the trend).
+
+## [Prophet](forecast_prophet.py)
+**Prophet** is a procedure for forecasting time series data based on an additive model where non-linear trends are fit with yearly, weekly, and daily seasonality, plus holiday effects. It works best with time series that have strong seasonal effects and several seasons of historical data. Prophet is robust to missing data and shifts in the trend, and typically handles outliers well. Prophet is open source software released by Facebook’s Core Data Science team.
+
+## [HWES](forecast_hwes.py)
+**HWES (Holt Winter’s Exponential Smoothing)**, also known as the Triple Exponential Smoothing method, models the next time step as an exponentially weighted linear function of observations at prior time steps, taking trends and seasonality into account. Triple exponential smoothing applies exponential smoothing three times, which is commonly used when there are three high frequency signals to be removed from a time series under study. There are different types of seasonality: 'multiplicative' and 'additive' in nature, much like addition and multiplication are basic operations in mathematics. The method calculates a trend line for the data as well as seasonal indices that weight the values in the trend line based on where that time point falls in the cycle.
+
+# forecast_recommender
+## class forecast_recommender.auto_forecast(evaluate_metric)
+
+### **Parameters**
+
+* `evaluate_metric` : int  
+ > The evaluation metric for learning model (Integer 1 to 8)
+
+### Evaluation metric for learning model
 1. Mean absolute error (MAE)
 2. Mean squared error (MSE)
 3. Root Mean Square Error (RMSE)
@@ -10,12 +32,14 @@ Evaluation metric for learning model
 7. Normalized mean squared error (NMSE)
 8. Theil's U statistic
 
+# Demo
+Demonstration done in [forecasting-demo.ipynb](forecasting-demo.ipynb)
 
 ```python
 from forecast_recommender import forecast_recommender
 import pandas as pd
 
-df1 = pd.read_csv("../monthly-car-sales.csv")
+df1 = pd.read_csv("monthly-car-sales.csv")
 recommender = forecast_recommender(df1)
 result, model_name = recommender.auto_forecast(1)
 ```
@@ -27,7 +51,7 @@ result, model_name = recommender.auto_forecast(1)
     ma.S.L12      -0.4687      0.114     -4.108      0.000      -0.692      -0.245
     sigma2      2.673e+06    4.8e+05      5.573      0.000    1.73e+06    3.61e+06
     ==============================================================================
-    
+
     ==============================================
     Metrics for ARIMA Model:
     Mean Absolute Error: 1451.103
@@ -39,8 +63,8 @@ result, model_name = recommender.auto_forecast(1)
     Normalised mean squared error: 0.192
     Theil's U statistic: 0.0
     ==============================================
-    
-    
+
+
     ==============================================
     Metrics for FBProphet Model:
     Mean Absolute Error: 1336.814
@@ -52,8 +76,8 @@ result, model_name = recommender.auto_forecast(1)
     Normalised mean squared error: 0.2
     Theil_u_statistic: 0.0
     ==============================================
-    
-    
+
+
     ==============================================
     Metrics for HWES Model:
     Mean Absolute Error: 1589.052
@@ -65,16 +89,15 @@ result, model_name = recommender.auto_forecast(1)
     Normalised mean squared error: 0.316
     Theil_u_statistic: 0.0
     ==============================================
-    
-    
+
+
 
 
 ```python
-print("\nBest model for this dataset is ", model_name)
+print("Best model for this dataset is ", model_name)
 print(result)
 ```
 
-    
     Best model for this dataset is  FbProphet
                ds          yhat
     0  1969-01-01  15396.026630
@@ -89,4 +112,3 @@ print(result)
     9  1969-10-01  18697.917520
     10 1969-11-01  18592.832407
     11 1969-12-01  16406.359115
-    
